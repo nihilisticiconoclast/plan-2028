@@ -1,0 +1,65 @@
+name: Weekly check-in
+
+# Cron is UTC. 16:00 UTC Friday = 17:00 UK in summer, 16:00 in winter.
+# (Same UTC quirk as the reading-pipeline routine timing.)
+on:
+  schedule:
+    - cron: "0 16 * * 5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  checkin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = JSON.parse(fs.readFileSync('plan.json', 'utf8'));
+            const today = new Date();
+            const iso = today.toISOString().slice(0, 10);
+            const horizon = new Date(today); horizon.setDate(horizon.getDate() + 60);
+
+            const open = [];
+            for (const phase of plan.phases) {
+              for (const o of phase.objectives) {
+                if (o.status === 'done' || o.status === 'dropped') continue;
+                const due = new Date(o.due);
+                if (due <= horizon) {
+                  const days = Math.ceil((due - today) / 86400000);
+                  const tag = days < 0 ? `OVERDUE by ${-days}d` : `due in ${days}d`;
+                  open.push(`- [${o.id}] ${o.title} — ${tag}`);
+                }
+              }
+            }
+
+            const lastLog = plan.log[plan.log.length - 1];
+            const staleDays = Math.floor((today - new Date(lastLog.date)) / 86400000);
+
+            const body = [
+              `**What moved this week?**`,
+              ``,
+              `**What's blocked?**`,
+              ``,
+              `**Next week's single priority:**`,
+              ``,
+              `---`,
+              `Last log entry: ${lastLog.date} (${staleDays} days ago)`,
+              open.length ? `\nOn the radar (next 60 days):\n${open.join('\n')}` : '',
+              ``,
+              `Answer the three lines, log anything that moved, close. Two minutes, no more.`
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Check-in — ${iso}`,
+              body,
+              labels: ['check-in']
+            });
