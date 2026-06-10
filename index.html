@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan 2028</title>
+<style>
+  :root {
+    --bg: #0e1116;
+    --panel: #161b22;
+    --panel-2: #1c2430;
+    --ink: #e6edf3;
+    --muted: #8b949e;
+    --line: #30363d;
+    --not_started: #d29922;
+    --in_progress: #3b82f6;
+    --done: #2ea043;
+    --dropped: #6e44ff;
+    --loud: #f85149;
+    --accent-a: #f778ba;
+    --accent-b: #58a6ff;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #ffffff;
+      --panel: #f6f8fa;
+      --panel-2: #eef1f4;
+      --ink: #1f2328;
+      --muted: #59636e;
+      --line: #d0d7de;
+      --not_started: #bf8700;
+      --in_progress: #0969da;
+      --done: #1a7f37;
+      --dropped: #8250df;
+      --loud: #cf222e;
+      --accent-a: #bf3989;
+      --accent-b: #0969da;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 28px 16px 80px;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 40px; line-height: 1.05; margin: 0 0 8px; letter-spacing: -.02em; font-weight: 800;
+    background: linear-gradient(90deg, var(--accent-a), var(--accent-b));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .sub { color: var(--ink); margin: 0 0 28px; font-size: 16px; max-width: 70ch; opacity: .85; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 36px 0 14px; }
+  section { margin-bottom: 8px; }
+
+  /* Staleness gauge */
+  .stale { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; align-items: baseline; gap: 10px; }
+  .stale .n { font-size: 28px; font-weight: 700; }
+  .stale.loud { border-color: var(--loud); background: color-mix(in srgb, var(--loud) 14%, var(--panel)); }
+  .stale.loud .n { color: var(--loud); }
+
+  /* Audit scoreboard */
+  .audit { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
+  .audit .item {
+    background: linear-gradient(160deg, color-mix(in srgb, var(--s) 22%, var(--panel)), var(--panel));
+    border: 1px solid color-mix(in srgb, var(--s) 45%, var(--line));
+    border-radius: 12px; padding: 18px; min-height: 130px; display: flex; flex-direction: column;
+  }
+  .audit .item .t { font-size: 16px; font-weight: 600; line-height: 1.35; }
+  .audit .item .st {
+    margin-top: auto; align-self: flex-start; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    color: #fff; background: var(--s); padding: 4px 10px; border-radius: 999px;
+  }
+  @media (prefers-color-scheme: light) { .audit .item .st { color: #fff; } }
+
+  /* Timeline */
+  .tl-wrap { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px 16px 14px; overflow-x: auto; }
+  .tl { position: relative; min-width: 820px; }
+  .tl .bands { position: relative; height: 54px; border-radius: 8px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--line); }
+  .tl .band { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--ink); border-right: 2px solid var(--bg); }
+  .tl .band:nth-child(4n+1) { background: color-mix(in srgb, var(--accent-b) 18%, var(--panel-2)); }
+  .tl .band:nth-child(4n+2) { background: color-mix(in srgb, var(--accent-a) 18%, var(--panel-2)); }
+  .tl .band:nth-child(4n+3) { background: color-mix(in srgb, var(--done) 18%, var(--panel-2)); }
+  .tl .band:nth-child(4n+4) { background: color-mix(in srgb, var(--not_started) 18%, var(--panel-2)); }
+
+  /* Today pin */
+  .tl .today { position: absolute; top: -14px; bottom: 0; width: 3px; background: var(--loud); z-index: 5; }
+  .tl .today .flag {
+    position: absolute; top: -26px; font-size: 11px; font-weight: 800; letter-spacing: .04em; color: #fff;
+    background: var(--loud); padding: 3px 9px; border-radius: 6px; white-space: nowrap;
+  }
+  .tl .today .flag::after { content: ""; position: absolute; left: 12px; bottom: -5px; border: 5px solid transparent; border-top-color: var(--loud); border-bottom: 0; }
+
+  /* Objective markers — evenly-spaced label columns, uniform height, tied to true dates by leader lines */
+  .tl .markers { position: relative; margin-top: 16px; }
+  .tl .leaders { position: absolute; top: 0; left: 0; width: 100%; height: 72px; overflow: visible; pointer-events: none; }
+  .tl .leaders line { stroke: var(--line); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+  .tl .tick { position: absolute; top: 9px; width: 10px; height: 10px; border-radius: 50%; transform: translateX(-50%); background: var(--muted); border: 2px solid var(--bg); }
+  .tl .col { position: absolute; top: 76px; transform: translateX(-50%); width: max-content; max-width: 150px; text-align: center; }
+  .tl .col .date { font-size: 11px; font-weight: 700; color: var(--ink); margin-bottom: 6px; white-space: nowrap; }
+  .tl .col .rows { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .tl .col .o { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+  .tl .col .o .d2 { width: 10px; height: 10px; border-radius: 50%; background: var(--s); flex: none; box-shadow: 0 0 0 2px var(--bg); }
+  .tl .col .o b { color: var(--ink); font-weight: 600; }
+  .tl .axis { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; color: var(--muted); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 8px; }
+
+  /* Phase panels */
+  .phase { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+  .phase .head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; margin-bottom: 4px; }
+  .phase .name { font-weight: 700; font-size: 16px; }
+  .phase .range { font-size: 12px; color: var(--muted); }
+  .phase .nums { display: flex; gap: 28px; margin: 12px 0 14px; }
+  .phase .nums .pair { font-size: 12px; color: var(--muted); }
+  .phase .nums .pair b { display: block; font-size: 22px; color: var(--ink); font-weight: 700; }
+  .obj { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--line); }
+  .obj .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 6px; background: var(--s); }
+  .obj .body { flex: 1; min-width: 0; }
+  .obj .t { font-size: 14px; }
+  .obj.dropped .t { text-decoration: line-through; color: var(--muted); }
+  .obj .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .obj .meta .st { color: var(--s); text-transform: uppercase; letter-spacing: .04em; font-weight: 600; }
+  .obj .note { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* Log */
+  .log { list-style: none; padding: 0; margin: 0; }
+  .log li { padding: 10px 0; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 16px; }
+  .log li .d { flex: none; width: 104px; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .log li .n { flex: 1; }
+  .err { color: var(--loud); }
+</style>
+</head>
+<body>
+<h1>Plan 2028</h1>
+<p class="sub" id="direction"></p>
+<div id="app"><p class="sub">Loading plan.json…</p></div>
+
+<script>
+const DAY = 86400000;
+const today = new Date();
+
+function d(s) { return new Date(s + "T00:00:00Z"); }
+function days(a, b) { return Math.floor((b - a) / DAY); }
+function pct(start, end, at) { return Math.max(0, Math.min(1, (at - start) / (end - start))) * 100; }
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function fmt(s) { const x = d(s); return x.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }); }
+
+function render(plan) {
+  document.getElementById("direction").textContent = plan.meta.direction;
+  const hStart = d(plan.meta.horizon_start), hEnd = d(plan.meta.horizon_end);
+  const app = document.getElementById("app");
+  let html = "";
+
+  // Staleness gauge (top, prominent)
+  const last = plan.log[plan.log.length - 1];
+  const stale = days(d(last.date), today);
+  html += `<section><div class="stale ${stale > 14 ? "loud" : ""}">
+    <span class="n">${stale}</span>
+    <span>day${stale === 1 ? "" : "s"} since the last log entry (${esc(last.date)})${stale > 14 ? " — this tracker is going stale." : ""}</span>
+  </div></section>`;
+
+  // 2028 audit scoreboard
+  html += `<section><h2>2028 audit</h2><div class="audit">`;
+  for (const a of plan.audit_2028) {
+    html += `<div class="item" style="--s:var(--${a.status})">
+      <div class="t">${esc(a.title)}</div>
+      <span class="st">${a.status.replace("_", " ")}</span>
+    </div>`;
+  }
+  html += `</div></section>`;
+
+  // Timeline
+  html += `<section><h2>Timeline · ${esc(plan.meta.horizon_start)} → ${esc(plan.meta.horizon_end)}</h2><div class="tl-wrap"><div class="tl">`;
+  html += `<div class="bands">`;
+  for (const p of plan.phases) {
+    const l = pct(hStart, hEnd, d(p.start)), r = pct(hStart, hEnd, d(p.end));
+    html += `<div class="band" style="left:${l}%;width:${r - l}%" title="${esc(p.name)}">${esc(p.name.split("—")[0].trim())}</div>`;
+  }
+  // Today pin
+  const tp = pct(hStart, hEnd, today);
+  const flagPos = tp < 12 ? `left:6px` : tp > 88 ? `right:6px` : `left:50%;transform:translateX(-50%)`;
+  html += `<div class="today" style="left:${tp}%"><span class="flag" style="${flagPos}">YOU ARE HERE · ${fmt(today.toISOString().slice(0,10))}</span></div>`;
+  html += `</div>`;
+
+  // Objective markers: group by due date, lay the labels out evenly (uniform height, no overlap),
+  // and tie each back to its true position on the axis with a leader line.
+  const groups = {};
+  for (const p of plan.phases) for (const o of p.objectives) (groups[o.due] ||= []).push(o);
+  const dates = Object.keys(groups).sort();
+  const N = dates.length;
+  let ticks = "", lines = "", cols = "", maxRows = 1;
+  dates.forEach((due, i) => {
+    const tx = pct(hStart, hEnd, d(due));   // true date position
+    const sx = (i + 0.5) / N * 100;         // even label slot
+    maxRows = Math.max(maxRows, groups[due].length);
+    ticks += `<span class="tick" style="left:${tx}%"></span>`;
+    lines += `<line x1="${tx * 10}" y1="14" x2="${sx * 10}" y2="72"></line>`;
+    let rows = "";
+    for (const o of groups[due]) {
+      rows += `<div class="o" style="--s:var(--${o.status})" title="${esc(o.title)} — ${o.status.replace("_"," ")}"><span class="d2"></span><b>${esc(o.id)}</b></div>`;
+    }
+    cols += `<div class="col" style="left:${sx}%"><div class="date">${fmt(due)}</div><div class="rows">${rows}</div></div>`;
+  });
+  html += `<div class="markers" style="height:${76 + maxRows * 18 + 14}px">
+    <svg class="leaders" viewBox="0 0 1000 72" preserveAspectRatio="none">${lines}</svg>${ticks}${cols}</div>`;
+  html += `<div class="axis"><span>${fmt(plan.meta.horizon_start)}</span><span>${fmt(plan.meta.horizon_end)}</span></div>`;
+  html += `</div></div></section>`;
+
+  // Phase panels
+  html += `<section><h2>Phases</h2>`;
+  for (const p of plan.phases) {
+    const start = d(p.start), end = d(p.end);
+    const doneCount = p.objectives.filter(o => o.status === "done").length;
+    const total = p.objectives.length;
+    const elapsed = Math.round(pct(start, end, today));
+    html += `<div class="phase">
+      <div class="head"><span class="name">${esc(p.name)}</span><span class="range">${esc(p.start)} → ${esc(p.end)}</span></div>
+      <div class="nums">
+        <span class="pair"><b>${doneCount} / ${total}</b>objectives done</span>
+        <span class="pair"><b>${elapsed}%</b>of window elapsed</span>
+      </div>`;
+    for (const o of p.objectives) {
+      const dleft = days(today, d(o.due));
+      let when;
+      if (o.status === "done") when = "done";
+      else if (o.status === "dropped") when = "dropped";
+      else if (dleft < 0) when = `overdue ${-dleft}d`;
+      else when = `due in ${dleft}d`;
+      html += `<div class="obj ${o.status}" style="--s:var(--${o.status})">
+        <span class="dot"></span>
+        <div class="body">
+          <div class="t">${esc(o.title)}</div>
+          <div class="meta"><span class="st">${o.status.replace("_"," ")}</span> · ${esc(o.id)} · ${esc(o.due)} · ${when}</div>
+          ${o.note ? `<div class="note">${esc(o.note)}</div>` : ""}
+        </div>
+      </div>`;
+    }
+    html += `</div>`;
+  }
+  html += `</section>`;
+
+  // Log (reverse chronological)
+  html += `<section><h2>Log</h2><ul class="log">`;
+  for (const e of [...plan.log].reverse()) {
+    html += `<li><span class="d">${esc(e.date)}</span><span class="n">${esc(e.note)}</span></li>`;
+  }
+  html += `</ul></section>`;
+
+  app.innerHTML = html;
+}
+
+fetch("plan.json", { cache: "no-store" })
+  .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+  .then(render)
+  .catch(err => {
+    document.getElementById("app").innerHTML =
+      `<p class="err">Could not load plan.json (${esc(err.message)}).<br>
+       If viewing locally, serve over http — e.g. <code>python -m http.server</code> — not file://.</p>`;
+  });
+</script>
+</body>
+</html>
