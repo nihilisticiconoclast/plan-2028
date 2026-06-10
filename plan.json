@@ -21,24 +21,24 @@
       "objectives": [
         {
           "id": "p1-o1",
-          "title": "TBC: production model — give a stakeholder point estimate a distribution",
-          "due": "2026-09-30",
-          "status": "not_started",
-          "note": "Definition pending. Pick the number stakeholders consume as a point estimate; ship with prediction intervals, built off Snowflake, documented, circulated. The TBC itself has a deadline."
-        },
-        {
-          "id": "p1-o2",
           "title": "Snowflake SQL skill v0.1 committed and used on one real task",
           "due": "2026-07-31",
           "status": "not_started",
           "note": "Draft from observed conventions; do not wait for the standards document. Reconcile later."
         },
         {
-          "id": "p1-o3",
+          "id": "p1-o2",
           "title": "Python bridge: port one M348 analysis (PyMC grid approximation or statsmodels GLM)",
           "due": "2026-08-15",
           "status": "not_started",
           "note": "Two weekends, not a project. Purpose: TM358 opens on familiar syntax."
+        },
+        {
+          "id": "p1-o3",
+          "title": "TBC: production model — give a stakeholder point estimate a distribution",
+          "due": "2026-09-30",
+          "status": "not_started",
+          "note": "Definition pending. Pick the number stakeholders consume as a point estimate; ship with prediction intervals, built off Snowflake, documented, circulated. The TBC itself has a deadline."
         },
         {
           "id": "p1-o4",
@@ -156,6 +156,10 @@
     {
       "date": "2026-06-10",
       "note": "Renderer (index.html) built and deployed to GitHub Pages. All five sections live: staleness gauge, 2028 audit, timeline, phase panels, log."
+    },
+    {
+      "date": "2026-06-10",
+      "note": "Renumbered p1 objectives so ids run in due-date order (old o1 -> o3, o2 -> o1, o3 -> o2; o4/o5 unchanged). One-time baseline correction made before any external reference to the ids existed; ids are now stable per the data rules."
     }
   ]
 }
