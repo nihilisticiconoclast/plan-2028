@@ -57,7 +57,7 @@
   section { margin-bottom: 8px; }
 
   /* Staleness gauge */
-  .stale { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; align-items: baseline; gap: 10px; }
+  .stale { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 10px; }
   .stale .n { font-size: 28px; font-weight: 700; }
   .stale.loud { border-color: var(--loud); background: color-mix(in srgb, var(--loud) 14%, var(--panel)); }
   .stale.loud .n { color: var(--loud); }
@@ -221,7 +221,7 @@ function render(plan) {
         <span class="pair"><b>${doneCount} / ${total}</b>objectives done</span>
         <span class="pair"><b>${elapsed}%</b>of window elapsed</span>
       </div>`;
-    for (const o of p.objectives) {
+    for (const o of [...p.objectives].sort((a, b) => a.due.localeCompare(b.due))) {
       const dleft = days(today, d(o.due));
       let when;
       if (o.status === "done") when = "done";

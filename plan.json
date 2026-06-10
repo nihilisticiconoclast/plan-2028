@@ -152,6 +152,10 @@
     {
       "date": "2026-06-10",
       "note": "Plan encoded from Claude conversation. Repo initialised. Renderer not yet built."
+    },
+    {
+      "date": "2026-06-10",
+      "note": "Renderer (index.html) built and deployed to GitHub Pages. All five sections live: staleness gauge, 2028 audit, timeline, phase panels, log."
     }
   ]
 }
