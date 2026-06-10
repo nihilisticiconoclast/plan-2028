@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "created": "2026-06-10",
+    "horizon_start": "2026-06-01",
+    "horizon_end": "2028-06-30",
+    "direction": "Probabilistic modelling specialist within a finance data function; AI-augmented delivery as force multiplier, not identity. Quantum stays in the library until post-2028."
+  },
+  "audit_2028": [
+    { "id": "a1", "title": "Production statistical model with my name on it", "status": "not_started" },
+    { "id": "a2", "title": "Lineage tooling adopted as team infrastructure", "status": "not_started" },
+    { "id": "a3", "title": "Snowflake skill in daily use", "status": "not_started" },
+    { "id": "a4", "title": "Public pipeline as evidence of agentic competence", "status": "in_progress" },
+    { "id": "a5", "title": "Degree complete + fork decision settled (modelling / validation / financial crime)", "status": "not_started" }
+  ],
+  "phases": [
+    {
+      "id": "p1",
+      "name": "Window one — pre-modules",
+      "start": "2026-06-10",
+      "end": "2026-09-30",
+      "objectives": [
+        {
+          "id": "p1-o1",
+          "title": "TBC: production model — give a stakeholder point estimate a distribution",
+          "due": "2026-09-30",
+          "status": "not_started",
+          "note": "Definition pending. Pick the number stakeholders consume as a point estimate; ship with prediction intervals, built off Snowflake, documented, circulated. The TBC itself has a deadline."
+        },
+        {
+          "id": "p1-o2",
+          "title": "Snowflake SQL skill v0.1 committed and used on one real task",
+          "due": "2026-07-31",
+          "status": "not_started",
+          "note": "Draft from observed conventions; do not wait for the standards document. Reconcile later."
+        },
+        {
+          "id": "p1-o3",
+          "title": "Python bridge: port one M348 analysis (PyMC grid approximation or statsmodels GLM)",
+          "due": "2026-08-15",
+          "status": "not_started",
+          "note": "Two weekends, not a project. Purpose: TM358 opens on familiar syntax."
+        },
+        {
+          "id": "p1-o4",
+          "title": "Development conversation with manager: modelling specialisation into formal objectives",
+          "due": "2026-09-30",
+          "status": "not_started",
+          "note": "Before objective-setting season. Targets nobody else knows about are wishes."
+        },
+        {
+          "id": "p1-o5",
+          "title": "Pitch lineage / view-dependency work as a named team initiative",
+          "due": "2026-09-30",
+          "status": "not_started",
+          "note": "Optional but promotion-shaped. Consolidates DAG work, OBJECT_DEPENDENCIES, refactoring practice under one label."
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "name": "Study year — TM358 + M343",
+      "start": "2026-10-01",
+      "end": "2027-06-30",
+      "objectives": [
+        {
+          "id": "p2-o1",
+          "title": "TM358 completed; Python a working language",
+          "due": "2027-06-30",
+          "status": "not_started",
+          "note": "Steer coursework toward finance-flavoured data where assignments permit."
+        },
+        {
+          "id": "p2-o2",
+          "title": "One internal note reframing a live work problem with M343 machinery",
+          "due": "2027-06-30",
+          "status": "not_started",
+          "note": "Delinquency / state-transition problems are Markov chains. Write it down, circulate."
+        },
+        {
+          "id": "p2-o3",
+          "title": "Hold the line: no new side projects this academic year",
+          "due": "2027-06-30",
+          "status": "not_started",
+          "note": "Integration, not addition. Pipeline and tooling in maintenance mode. 120 credits + full-time work is the M348 load doubled."
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "name": "Window two — decision point",
+      "start": "2027-07-01",
+      "end": "2027-09-30",
+      "objectives": [
+        {
+          "id": "p3-o1",
+          "title": "Internal presentation: forecasting model or Claude Code workflow",
+          "due": "2027-09-30",
+          "status": "not_started",
+          "note": "Whichever has the better story by then."
+        },
+        {
+          "id": "p3-o2",
+          "title": "Role-shape conversation: post-degree positioning",
+          "due": "2027-09-30",
+          "status": "not_started"
+        },
+        {
+          "id": "p3-o3",
+          "title": "If fraud pull is live: small cross-team piece of work to test it",
+          "due": "2027-09-30",
+          "status": "not_started",
+          "note": "Conditional objective. Cheap test from inside; drop without guilt if the pull has faded."
+        },
+        {
+          "id": "p3-o4",
+          "title": "Fork decision recorded: modelling-in-insights / model validation / financial crime",
+          "due": "2027-09-30",
+          "status": "not_started",
+          "note": "The decision is an artefact. Write it in the log with reasons. Deferring past this window is itself a decision, and the wrong one."
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "name": "M347 year — finish",
+      "start": "2027-10-01",
+      "end": "2028-06-30",
+      "objectives": [
+        {
+          "id": "p4-o1",
+          "title": "M347 completed, Wasserman alongside",
+          "due": "2028-06-30",
+          "status": "not_started"
+        },
+        {
+          "id": "p4-o2",
+          "title": "MSc decision made, downstream of the fork",
+          "due": "2028-06-30",
+          "status": "not_started",
+          "note": "Under-60 eligibility means no clock. Instrumental or recreational — decide which, then decide whether."
+        },
+        {
+          "id": "p4-o3",
+          "title": "2028 audit: all five items resolved (done or consciously dropped)",
+          "due": "2028-06-30",
+          "status": "not_started"
+        }
+      ]
+    }
+  ],
+  "log": [
+    {
+      "date": "2026-06-10",
+      "note": "Plan encoded from Claude conversation. Repo initialised. Renderer not yet built."
+    }
+  ]
+}
