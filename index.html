@@ -115,6 +115,16 @@
   .log li .d { flex: none; width: 104px; text-align: right; font-family: var(--font-data); color: var(--contour); font-variant-numeric: tabular-nums; font-size: 13px; }
   .log li .n { flex: 1; }
   .err { color: var(--route); }
+
+  /* the per-page doodle: a margin decoration, NOT a section of its own. Pulled out
+     of flow and tucked into the right gutter, behind the content (the opaque panels
+     cover it; it shows only in the empty margins) — so it never adds a band, shoves
+     the page around, or fights the text. */
+  body { position: relative; }
+  .doodle {
+    position: absolute; top: clamp(72px,10vw,120px); right: 0;
+    width: clamp(140px,18vw,260px); margin: 0; opacity: .6; z-index: -1; pointer-events: none;
+  }
 </style>
 </head>
 <body data-seed="plan-2028">
