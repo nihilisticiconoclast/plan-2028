@@ -43,7 +43,13 @@ Single `index.html`, vanilla JS or CDN libraries only. Fetches `plan.json`
 5. **Log** — reverse-chronological, plain.
 
 Design constraints: no gamification, no streaks, no badges, no confetti. Honest
-and legible beats pretty. Dark-mode-friendly. Must be readable on a phone.
+and legible beats pretty. Must be readable on a phone. Uses the in-house "Tunnel"
+aesthetic — its locked layer (palette, type, hard edges, the signature figures)
+is linked from cuddly-lamp's `tokens.css`/`tunnel-figure.js` on the CDN, never
+inlined; only the page-specific layout lives in `index.html`. The renderer keys
+status colour off CSS variables (`--not_started` etc.) mapped onto the Tunnel
+palette, and spends the single red `--route` on the timeline's "today" marker.
+See `.claude/skills/tunnel-aesthetic/SKILL.md`.
 
 ## Build budget (instruction to Claude Code)
 
